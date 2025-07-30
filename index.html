@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Таны Өгүүлбэр</title>
+  <title>Таны Бизнес Зурхай</title>
   <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 <body>
@@ -16,32 +16,52 @@
     </div>
 
     <div id="quote-section" class="quote-box hidden">
-      <h2 class="quote-title">🌟 ТАНЫ ӨГҮҮЛБЭР:</h2>
+      <h2 class="quote-title">🌟 Таны Бизнес Зурхай:</h2>
       <p id="quote" class="quote-text"></p>
     </div>
   </div>
 
   <script>
-    function showQuote() {
-      const birthdayInput = document.getElementById("birthday").value;
-      if (!birthdayInput) {
-        alert("Төрсөн өдрөө оруулна уу!");
-        return;
-      }
-
-      // төрсөн өдөр ба OK товч бүхий хэсгийг нуух
+  window.onload = function () {
+    if (localStorage.getItem("seenQuote") === "true") {
       document.getElementById("input-section").style.display = "none";
-      document.getElementById("text-section").style.display = "none";
-
-      fetch('quotes.json')
-        .then(res => res.json())
-        .then(data => {
-          const randomIndex = Math.floor(Math.random() * data.length);
-          const selectedQuote = data[randomIndex];
-          document.getElementById("quote").textContent = selectedQuote;
-          document.getElementById("quote-section").classList.remove('hidden');
-        });
+      document.getElementById("quote-section").classList.remove("hidden");
+      document.getElementById("quote").textContent = localStorage.getItem("quoteText");
     }
-  </script>
+  };
+
+  function showQuote() {
+    const birthdayInput = document.getElementById("birthday").value;
+    if (!birthdayInput) {
+      alert("Төрсөн өдрөө оруулна уу!");
+      return;
+    }
+
+    const minDate = new Date("1955-01-01");
+    const maxDate = new Date("2023-01-01");
+    const selectedDate = new Date(birthdayInput);
+    if (selectedDate < minDate || selectedDate > maxDate) {
+      alert("Төрсөн өдөр 1955-01-01 ба 2023-01-01 хооронд байх ёстой!");
+      return;
+    }
+
+    document.getElementById("input-section").style.display = "none";
+
+    fetch("quotes.json")
+      .then((res) => res.json())
+      .then((data) => {
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const selectedQuote = data[randomIndex];
+
+        document.getElementById("quote").textContent = selectedQuote;
+        document.getElementById("quote-section").classList.remove("hidden");
+
+        // localStorage-д хадгалах
+        localStorage.setItem("seenQuote", "true");
+        localStorage.setItem("quoteText", selectedQuote);
+      });
+  }
+</script>
+
 </body>
 </html>

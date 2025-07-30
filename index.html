@@ -25,6 +25,7 @@
   window.onload = function () {
     if (localStorage.getItem("seenQuote") === "true") {
       document.getElementById("input-section").style.display = "none";
+	  document.getElementById("text-section").style.display = "none";
       document.getElementById("quote-section").classList.remove("hidden");
       document.getElementById("quote").textContent = localStorage.getItem("quoteText");
     }

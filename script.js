@@ -5,8 +5,9 @@ function showQuote() {
     return;
   }
 
-document.getElementById("input-section").style.display = "none";
 
+    document.getElementById("birthday").style.display = "none";
+    document.querySelector("button").style.display = "none";
   fetch('quotes.json')
     .then(res => res.json())
     .then(data => {
@@ -14,5 +15,6 @@ document.getElementById("input-section").style.display = "none";
       const selectedQuote = data[randomIndex];
       document.getElementById("quote").textContent = selectedQuote;
       document.getElementById("quote-section").style.display = 'block';
+	  
     });
 }

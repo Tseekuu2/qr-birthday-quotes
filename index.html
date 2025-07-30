@@ -2,29 +2,40 @@
 <html lang="mn">
 <head>
   <meta charset="UTF-8">
-  <title>Өгүүлбэр Санамсаргүй Сонгох</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Өгүүлбэр</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 50px; }
+    #quote-section { margin-top: 30px; display: none; font-style: italic; }
+  </style>
 </head>
 <body>
-  <h1>QR Код Уншуулж, Төрсөн Өдрөө Оруулна уу</h1>
+  <h1>Төрсөн Өдрөө Оруулана уу</h1>
 
-  <video id="qr-video" autoplay muted playsinline></video>
-  <p id="qr-result">QR код уншуулаагүй байна.</p>
+  <input type="date" id="birthday" required>
+  <button onclick="showQuote()">OK</button>
 
-  <div id="birthday-section" style="display:none;">
-    <label>Төрсөн Өдөр:
-      <input type="date" id="birthday" required>
-    </label>
-    <button id="generate">Өгүүлбэр Харах</button>
-  </div>
-
-  <div id="quote-section" style="display:none;">
+  <div id="quote-section">
     <h2>Таны Өгүүлбэр:</h2>
     <p id="quote"></p>
   </div>
 
-  <script src="jsqr.min.js"></script>
-  <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
-  <script src="script.js"></script>
+  <script>
+    function showQuote() {
+      const birthdayInput = document.getElementById("birthday").value;
+      if (!birthdayInput) {
+        alert("Төрсөн өдрөө оруулна уу!");
+        return;
+      }
+
+      fetch('quotes.json')
+        .then(res => res.json())
+        .then(data => {
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const selectedQuote = data[randomIndex];
+          document.getElementById("quote").textContent = selectedQuote;
+          document.getElementById("quote-section").style.display = 'block';
+        });
+    }
+  </script>
 </body>
 </html>

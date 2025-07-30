@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <title>Өгүүлбэр Санамсаргүй Сонгох</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>QR Код Уншуулж, Төрсөн Өдрөө Оруулна уу</h1>
+
+  <video id="qr-video" autoplay muted playsinline></video>
+  <p id="qr-result">QR код уншуулаагүй байна.</p>
+
+  <div id="birthday-section" style="display:none;">
+    <label>Төрсөн Өдөр:
+      <input type="date" id="birthday" required>
+    </label>
+    <button id="generate">Өгүүлбэр Харах</button>
+  </div>
+
+  <div id="quote-section" style="display:none;">
+    <h2>Таны Өгүүлбэр:</h2>
+    <p id="quote"></p>
+  </div>
+
+  <script src="jsqr.min.js"></script>
+  <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

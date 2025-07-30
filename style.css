@@ -1,0 +1,16 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+video {
+  width: 300px;
+  border: 1px solid #ccc;
+}
+
+#quote {
+  font-size: 1.2em;
+  font-style: italic;
+  margin-top: 20px;
+}

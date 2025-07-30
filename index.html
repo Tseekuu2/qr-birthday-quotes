@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="title">🎉 ТӨРСӨН ӨДРӨӨ ОРУУЛААД ӨГҮҮЛБЭР ХАРААРАЙ</h1>
+    <h1 class="title" id="text-section">🎉 ТӨРСӨН ӨДРӨӨ ОРУУЛАНА УУ?</h1>
 
     <div id="input-section">
       <input type="date" id="birthday" required class="input-date">
@@ -31,6 +31,7 @@
 
       // төрсөн өдөр ба OK товч бүхий хэсгийг нуух
       document.getElementById("input-section").style.display = "none";
+      document.getElementById("text-section").style.display = "none";
 
       fetch('quotes.json')
         .then(res => res.json())

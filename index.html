@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="title" id="text-section">🎉 ТӨРСӨН ӨДРӨӨ ОРУУЛАНА УУ?</h1>
+    <h1 class="title" id="text-section">🎉 ТӨРСӨН ӨДРӨӨ ОРУУЛНА УУ?</h1>
 
     <div id="input-section">
       <input type="date" id="birthday" required class="input-date">
@@ -19,13 +19,18 @@
       <h2 class="quote-title">🌟 Таны Бизнес Зурхай:</h2>
       <p id="quote" class="quote-text"></p>
     </div>
+    
+    <div id="special-message" class="hidden">
+      <h2>🎉 Таны Бизнес Зурхай: 🎉</h2>
+      <p id="special-text">Энэ өдөр таны амьдралд шинэ хуудас нээгдэнэ гэж найдаж байна!</p>
+    </div>
   </div>
 
   <script>
   window.onload = function () {
     if (localStorage.getItem("seenQuote") === "true") {
       document.getElementById("input-section").style.display = "none";
-	  document.getElementById("text-section").style.display = "none";
+      document.getElementById("text-section").style.display = "none";
       document.getElementById("quote-section").classList.remove("hidden");
       document.getElementById("quote").textContent = localStorage.getItem("quoteText");
     }
@@ -41,6 +46,7 @@
     const minDate = new Date("1955-01-01");
     const maxDate = new Date("2023-01-01");
     const selectedDate = new Date(birthdayInput);
+    
     if (selectedDate < minDate || selectedDate > maxDate) {
       alert("Төрсөн өдөр 1955-01-01 ба 2023-01-01 хооронд байх ёстой!");
       return;
@@ -49,21 +55,57 @@
     document.getElementById("input-section").style.display = "none";
     document.getElementById("text-section").style.display = "none";
 
-    fetch("quotes.json")
-      .then((res) => res.json())
-      .then((data) => {
-        const randomIndex = Math.floor(Math.random() * data.length);
-        const selectedQuote = data[randomIndex];
+    // Special birthdays list
+    const specialBirthdays = [
+      { date: "1970-05-25", message: "Та Голомт банкны ТУЗ-н даргатай нэг өдөр төрсөн байна. Үзэж харалтгүй үнэхээрийн супер. "},
+		{ date: "1986-06-03", message: "Таны кареер таны бие шиг өндөр бас тодоос тод гялалзаж байна. "},
+		{ date: "1960-09-19", message: "Танд зурхай, мэргэ шаардлагагүй ээ. Одоо хийж байгаагаа цаашдаа ч хийх шинжтэй дээ. Амжилт хүсье. Гэрэлтээд бай залуу минь."},
+		{ date: "1980-09-17", message: "Та бол инноваци, шинэ санааны охин тэнгэр. Энгийн нэгэн хүнсний дэлгүүрээс пуужингийн бизнес байсан ч амархаан чадчихна. "},
+		{ date: "1980-10-25", message: "Юун хурц туяа вэ гэсэн чинь та байсан. Одоо хийж байгаагаа цаашдаа ч хийж улам тод гялалзана. "},
+		{ date: "1982-09-06", message: "Таны зурхайг нотариатаар баталгаажуулаад, англи хэл дээр орчуулаад, 2 хувь аваад очсон ч танд хангалтгүй юм байна аа. 😁"},
+		{ date: "1979-01-07", message: "Таныг инээмсэглэхэд л валютын ханш савлаж, хөмсгөө зангидангуут Төв банк бодлогын хүүгээ эргэж харах болж байхад зурхайгаар яахав дээ 😁."},
+		{ date: "1983-03-28", message: "Таны зурхай юу ч гарч ирсэн та огт итгэхгүй юм байна аа. 😄"},
+		{ date: "1986-06-21", message: "Танд зурхай, мэргэ шаардлагагүй ээ гал гал. "},
+		{ date: "1983-06-03", message: "Үзэж харалтгүй ээ. Та угаасаа сэндвич идээд сууж байгаа ч үнэндээ дэлхийн түвшний стратеги боловсруулж суудаг төрлийн хүн шүү дээ. "},
+		{ date: "1977-01-06", message: "Үзэж харалтгүй үнэхээрийн супер. "},
+		{ date: "1989-11-25", message: "Таны толгойг зурхайгаар эргүүлэх боломжгүй юм байна аа. "},
+		{ date: "1983-10-12", message: "Банк санхүүгийн салбарт тод од. Цаашдаа илүү ихийг хийж бүтээнэ."},
+		{ date: "1990-02-18", message: "Яг үнэндээ ганган оффис ботинкны дотор туулайтай оймс өмссөн байдгийг эс тооцвол ямар ч бизнесийг НУГална."},
+		{ date: "1977-02-16", message: "Таны зурхайг харах гэсэн чинь та оддын зурлагад биш, гүйлгээний тайланд илүү итгэдэг юм байна шүү дээ.😄"},
+		{ date: "1987-08-14", message: "Та өөрөө явдаг бизнес шүү дээ. 😁"},
+		{ date: "1986-12-03", message: "Танд зурхай, мэргэ шаардлагагүй ээ гал гал." }
+    ];
 
-        document.getElementById("quote").textContent = selectedQuote;
-        document.getElementById("quote-section").classList.remove("hidden");
+    // Check if the selected date is a special birthday
+    const specialBirthday = specialBirthdays.find(item => {
+      const specialDate = new Date(item.date);
+      return selectedDate.getFullYear() === specialDate.getFullYear() &&
+             selectedDate.getMonth() === specialDate.getMonth() &&
+             selectedDate.getDate() === specialDate.getDate();
+    });
 
-        // localStorage-д хадгалах
-        localStorage.setItem("seenQuote", "true");
-        localStorage.setItem("quoteText", selectedQuote);
-      });
+    if (specialBirthday) {
+      // Show the special message if matched
+      document.getElementById("special-message").classList.remove("hidden");
+      document.getElementById("special-text").textContent = specialBirthday.message;
+      document.getElementById("quote-section").classList.add("hidden");
+    } else {
+      // Otherwise, fetch random quote
+      fetch("quotes.json")
+        .then((res) => res.json())
+        .then((data) => {
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const selectedQuote = data[randomIndex];
+          document.getElementById("quote").textContent = selectedQuote;
+          document.getElementById("quote-section").classList.remove("hidden");
+          
+          // Save to localStorage
+          localStorage.setItem("seenQuote", "true");
+          localStorage.setItem("quoteText", selectedQuote);
+        });
+    }
   }
-</script>
+  </script>
 
 </body>
 </html>
